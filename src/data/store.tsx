@@ -94,12 +94,12 @@ export function canEditMember(idx: Index, user: User | null, m: Member) {
   return canManage(idx, user, m.unitId) && !isPowerPost(idx, m);
 }
 
-/** Post as shown on screen. The District President is the Supreme Commander. */
 /** Name of a unit's own committee: the District's is called "Office Bearers". */
 export function committeeName(idx: Index, u: Unit) {
   return u.id === idx.root.id ? 'Office Bearers' : u.type === 'extended' ? 'Members' : 'Committee';
 }
 
+/** Post as shown on screen. The District President is the Supreme Commander. */
 export function postOf(idx: Index, m: Member) {
   return m.unitId === idx.root.id && m.post === 'President' ? 'President (Supreme Commander)' : m.post;
 }
