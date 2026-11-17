@@ -62,16 +62,17 @@ export default function Hierarchy() {
         <>
           {/* Centre of the mind map: the unit and its head */}
           <Card className="p-4 relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-1.5 bg-saf" />
+            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#F97316] via-[#EA6A0C] to-[#15803D]" />
+            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-saf/10 blur-2xl" />
             <div className="flex items-center gap-2 text-xs text-mut mb-3">
-              <span className="rounded-full bg-saf-50 text-saf-700 px-2 py-0.5 font-semibold">{TYPE_LABEL[unit.type]}</span>
+              <span className="rounded-full bg-saf-100 text-saf px-2 py-0.5 font-semibold">{TYPE_LABEL[unit.type]}</span>
               <span>{committee.length} in committee · {kids.length} units below</span>
             </div>
             {head ? (
               <Link to={`/person/${head.id}`} className="flex items-center gap-3 group">
                 <Avatar name={head.name} size={56} />
                 <div className="min-w-0 flex-1">
-                  <div className="text-lg font-bold truncate group-hover:text-saf">{head.name}</div>
+                  <div className="text-lg font-bold tracking-tight truncate group-hover:text-saf transition-colors">{head.name}</div>
                   <div className="text-sm text-mut">{postOf(idx, head)}, {unit.name}</div>
                 </div>
                 <Icon d={I.info} className="text-saf" />
@@ -93,8 +94,10 @@ export default function Hierarchy() {
                 const on = t.key === selected;
                 return (
                   <button key={t.key} role="tab" aria-selected={on} onClick={() => pick(t.key)}
-                    className="relative overflow-hidden rounded-2xl border px-3 py-2.5 text-left transition active:scale-[.98]"
-                    style={on ? { background: t.color, borderColor: t.color, color: '#fff' } : { background: '#fff', borderColor: 'var(--color-line)' }}>
+                    className="relative overflow-hidden rounded-2xl border shadow-card px-3 py-2.5 text-left transition hover:-translate-y-px active:scale-[.98]"
+                    style={on
+                      ? { background: `linear-gradient(140deg, color-mix(in srgb, ${t.color} 85%, white), ${t.color})`, borderColor: t.color, color: '#fff', boxShadow: `0 12px 24px -12px ${t.color}` }
+                      : { background: 'var(--color-card)', borderColor: 'var(--color-line)' }}>
                     {!on && <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: t.color }} />}
                     <div className="text-2xl font-bold leading-tight" style={on ? undefined : { color: t.color }}>{t.count}</div>
                     <div className="text-xs font-semibold truncate">{t.label}</div>
@@ -171,7 +174,7 @@ function TreeRow({ idx, u, depth, open: initOpen = false }: { idx: Index; u: Uni
     <div>
       <div className="flex items-center gap-1 rounded-lg hover:bg-saf-50" style={{ paddingLeft: depth * 16 }}>
         <button onClick={() => setOpen(!open)} disabled={!kids.length} aria-label={open ? 'Collapse' : 'Expand'}
-          className="w-8 h-8 grid place-items-center text-saf disabled:text-gray-200">
+          className="w-8 h-8 grid place-items-center text-saf disabled:text-faint">
           <Icon d={open ? I.down : I.chev} size={16} />
         </button>
         <Link to={`/unit/${u.id}`} className="flex-1 min-w-0 py-1.5">

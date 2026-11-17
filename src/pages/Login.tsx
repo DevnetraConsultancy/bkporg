@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useStore } from '../data/store';
 import { ADMIN_EMAIL, DEMO_ADMIN_PASSWORD, DEMO_MEMBER_PASSWORD } from '../data/config';
 import type { Email } from '../data/types';
-import { Card, Field, btnCls, inputCls } from '../components/ui';
+import { Field, ThemeButton, btnCls, inputCls } from '../components/ui';
+import type { ReactNode } from 'react';
 
 type Mode = 'login' | 'forgot' | 'sent' | 'mailbox' | 'reset' | 'done';
 
@@ -38,15 +39,16 @@ export default function Login() {
   ].filter((d) => d.email) as { label: string; email: string; pw: string }[];
 
   return (
-    <div className="min-h-dvh px-4 py-10 bg-gradient-to-b from-saf to-saf-700">
-      <div className="w-full max-w-sm mx-auto">
-        <div className="text-center text-white mb-6">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-white/15 grid place-items-center text-3xl">🪷</div>
-          <h1 className="mt-3 text-2xl font-bold">Barrackpore Sangathan</h1>
-          <p className="text-sm opacity-90">District organisation app</p>
+    <div className="login-bg relative min-h-dvh px-4 py-10">
+      <div className="absolute right-3 top-3 text-white"><ThemeButton /></div>
+      <div className="fade-up w-full max-w-sm mx-auto">
+        <div className="text-center text-white mb-7">
+          <div className="mx-auto w-18 h-18 rounded-3xl bg-white/15 ring-1 ring-white/30 backdrop-blur grid place-items-center text-4xl shadow-[0_12px_30px_-10px_rgba(0,0,0,.35)]">🪷</div>
+          <h1 className="mt-4 text-[26px] font-bold tracking-tight">Barrackpore Sangathan</h1>
+          <p className="text-sm text-white/85">District organisation app</p>
         </div>
 
-        <Card className="p-5 space-y-3">
+        <Panel className="p-5 space-y-3">
           {mode === 'login' && (
             <>
               <Field label="Email"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@gmail.com" /></Field>
@@ -100,26 +102,31 @@ export default function Login() {
               <button onClick={() => go('login')} className={btnCls + ' w-full'}>Go to log in</button>
             </>
           )}
-        </Card>
+        </Panel>
 
         {mode === 'login' && (
-          <Card className="p-4 mt-4">
+          <Panel className="p-4 mt-4">
             <p className="text-xs font-semibold text-mut mb-2">DEMO ACCOUNTS: tap to fill</p>
             <div className="space-y-1.5">
               {demos.map((d) => (
                 <button key={d.label} onClick={() => { setEmail(d.email); setPassword(d.pw); setError(''); }}
-                  className="w-full text-left rounded-lg border border-line px-3 py-2 hover:border-saf">
+                  className="w-full text-left rounded-lg border border-line bg-card/60 px-3 py-2 transition hover:border-saf/60 hover:bg-saf-50">
                   <div className="text-sm font-semibold">{d.label}</div>
                   <div className="text-xs text-mut truncate">{d.email} · {d.pw}</div>
                 </button>
               ))}
-              <button onClick={() => go('mailbox')} className="w-full text-left rounded-lg border border-dashed border-saf px-3 py-2 text-sm font-semibold text-saf">📬 Demo mailbox (see emails the app sent)</button>
+              <button onClick={() => go('mailbox')} className="w-full text-left rounded-lg border border-dashed border-saf/60 px-3 py-2 text-sm font-semibold text-saf transition hover:bg-saf-50">📬 Demo mailbox (see emails the app sent)</button>
             </div>
-          </Card>
+          </Panel>
         )}
       </div>
     </div>
   );
+}
+
+/** Frosted card used on the login screen. */
+function Panel({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <div className={`glass rounded-3xl border border-white/40 shadow-[0_24px_60px_-20px_rgba(0,0,0,.45)] ${className}`}>{children}</div>;
 }
 
 /** DEMO ONLY: shows the emails the app "sent". The real app sends real emails. */
@@ -131,7 +138,7 @@ function Mailbox({ email, setEmail, emails, onOpenLink, onBack }: {
   return (
     <>
       <h2 className="font-bold">📬 Demo mailbox</h2>
-      <p className="text-xs rounded-lg bg-saf-50 text-saf-700 px-3 py-2">Demo only. In the real app these emails go to the person's Gmail.</p>
+      <p className="text-xs rounded-lg bg-saf-50 text-saf ring-1 ring-saf/15 px-3 py-2">Demo only. In the real app these emails go to the person's Gmail.</p>
       <Field label="Whose mailbox?"><input type="email" className={inputCls} value={email} onChange={(ev) => setEmail(ev.target.value)} /></Field>
       <div className="space-y-2 max-h-80 overflow-y-auto">
         {list.map((m) => (

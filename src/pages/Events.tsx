@@ -37,7 +37,7 @@ export function EventsList() {
           const u = idx.unit.get(e.unitId)!;
           return (
             <Card key={e.id} className="p-4 flex gap-3">
-              <div className="w-14 shrink-0 rounded-xl bg-saf-50 text-saf text-center py-2">
+              <div className="w-14 shrink-0 rounded-xl bg-saf-50 text-saf text-center py-2 ring-1 ring-saf/15">
                 <div className="text-xl font-bold leading-none">{d.getDate()}</div>
                 <div className="text-[11px] font-semibold uppercase">{d.toLocaleString('en', { month: 'short' })}</div>
               </div>
@@ -112,7 +112,7 @@ export function NewEvent() {
             <div className="flex flex-wrap gap-2">
               {levelOptions.map((l) => (
                 <button key={l} type="button" onClick={() => toggle(l)}
-                  className={`rounded-full border px-3 py-1.5 text-sm ${f.levels.includes(l) ? 'bg-saf border-saf text-white' : 'bg-white border-line'}`}>
+                  className={`rounded-full border px-3 py-1.5 text-sm ${f.levels.includes(l) ? 'bg-saf border-saf text-white shadow-[0_6px_16px_-8px_rgba(234,106,12,.8)]' : 'bg-card border-line'}`}>
                   {f.levels.includes(l) && <Icon d="M20 6L9 17l-5-5" size={14} className="inline -mt-0.5 mr-1" />}{TYPE_PLURAL[l]}
                 </button>
               ))}

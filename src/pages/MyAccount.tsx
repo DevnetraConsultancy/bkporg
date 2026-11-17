@@ -44,7 +44,7 @@ export function MyProfile() {
 function Locked({ label, value }: { label: string; value: string }) {
   return (
     <Field label={label}>
-      <div className="w-full rounded-xl border border-line bg-gray-50 px-3 py-2.5 text-sm text-mut flex justify-between gap-2"><span className="truncate">{value}</span><span>🔒</span></div>
+      <div className="w-full rounded-xl border border-line bg-soft px-3 py-2.5 text-sm text-mut flex justify-between gap-2"><span className="truncate">{value}</span><span>🔒</span></div>
     </Field>
   );
 }

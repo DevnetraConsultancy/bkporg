@@ -59,7 +59,7 @@ export function Chat() {
         <p className="text-center text-[11px] text-mut">Demo chat. The real app will use end-to-end encryption.</p>
         {msgs.map((m) => (
           <div key={m.id} className={`flex ${m.from === me ? 'justify-end' : ''}`}>
-            <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.from === me ? 'bg-saf text-white rounded-br-sm' : 'bg-white border border-line rounded-bl-sm'}`}>
+            <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.from === me ? 'bg-gradient-to-br from-[#F97316] to-[#DC5A06] text-white rounded-br-sm shadow-[0_6px_16px_-8px_rgba(234,106,12,.7)]' : 'bg-card border border-line shadow-card rounded-bl-sm'}`}>
               {m.text}
               <div className={`text-[10px] mt-0.5 ${m.from === me ? 'text-white/80' : 'text-mut'}`}>{new Date(m.at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
             </div>
@@ -67,7 +67,7 @@ export function Chat() {
         ))}
         <div ref={endRef} />
       </div>
-      <div className="fixed inset-x-0 bottom-[60px] z-10 bg-page/95 backdrop-blur border-t border-line">
+      <div className="glass fixed inset-x-0 bottom-[64px] z-10 border-t border-line">
         <div className="mx-auto max-w-2xl px-4 py-2 flex gap-2">
           <input className={inputCls} value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && send()} placeholder="Type a message" />
           <button onClick={send} className={btnCls}>Send</button>

@@ -46,12 +46,12 @@ function UnitPick({ u }: { u: Unit }) {
   const { idx } = useStore();
   const path = ancestors(idx, u.id).slice(1, -1).map((a) => a.name).join(' › ');
   return (
-    <Link to={`/admin/leaders/${u.id}`} className="flex items-center gap-3 rounded-xl bg-white border border-line px-3 py-2.5 hover:border-saf">
+    <Link to={`/admin/leaders/${u.id}`} className="flex items-center gap-3 rounded-xl bg-card border border-line shadow-card px-3 py-2.5 transition hover:border-saf/60 hover:shadow-lift">
       <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold truncate">{u.name}</div>
         <div className="text-xs text-mut truncate">{TYPE_LABEL[u.type]}{path && ` · ${path}`}</div>
       </div>
-      <Icon d={I.chev} size={18} className="text-gray-300" />
+      <Icon d={I.chev} size={18} className="text-faint" />
     </Link>
   );
 }
@@ -81,7 +81,7 @@ function Slot({ unit, post, holder }: { unit: Unit; post: string; holder?: Membe
   return (
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-2">
-        <span className="rounded-full bg-saf-100 text-saf-700 px-2 py-0.5 text-xs font-bold">{post}</span>
+        <span className="rounded-full bg-saf-100 text-saf px-2 py-0.5 text-xs font-bold">{post}</span>
       </div>
       {holder && (
         <div className="flex items-center gap-3">

@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import { isAdmin, postOf, powerUnit, useStore } from '../data/store';
 import { ADMIN_EMAIL, POWER_POSTS, TYPE_PLURAL } from '../data/config';
 import type { UnitType } from '../data/types';
-import { Avatar, Card, Page, btn2Cls } from '../components/ui';
+import { Avatar, Card, I, Icon, Page, btn2Cls } from '../components/ui';
+import { setThemeMode, useThemeMode, type ThemeMode } from '../data/theme';
 
 export default function Me() {
   const { idx, user, db, logout, resetDemo } = useStore();
@@ -24,6 +25,8 @@ export default function Me() {
           </div>
           {m && <Link to={`/person/${m.id}`} className="text-saf text-sm font-semibold">Profile ›</Link>}
         </Card>
+
+        <ThemePicker />
 
         <Card className="p-4 text-sm">
           <h3 className="font-bold mb-1">My power</h3>
@@ -55,12 +58,36 @@ export default function Me() {
           {m && <Link to="/me/profile" className={btn2Cls}>Edit my profile</Link>}
           <Link to="/me/password" className={btn2Cls + (m ? '' : ' col-span-2')}>Change password</Link>
         </div>
-        <button onClick={logout} className="w-full rounded-xl bg-white border border-line py-3 text-sm font-semibold text-bad">Log out</button>
+        <button onClick={logout} className="w-full rounded-xl bg-card border border-line shadow-card py-3 text-sm font-semibold text-bad transition hover:border-bad/40 active:scale-[.99]">Log out</button>
       </div>
     </Page>
   );
 }
 
 function Stat({ n, l }: { n: number; l: string }) {
-  return <div className="rounded-xl bg-saf-50 py-3"><div className="text-xl font-bold text-saf">{n}</div><div className="text-[11px] text-mut">{l}</div></div>;
+  return <div className="rounded-xl bg-saf-50 ring-1 ring-saf/10 py-3"><div className="text-xl font-bold text-saf">{n}</div><div className="text-[11px] text-mut">{l}</div></div>;
+}
+
+const THEMES: { m: ThemeMode; label: string; d: string }[] = [
+  { m: 'light', label: 'Light', d: I.sun },
+  { m: 'dark', label: 'Dark', d: I.moon },
+  { m: 'system', label: 'Phone', d: 'M7 2h10a2 2 0 012 2v16a2 2 0 01-2 2H7a2 2 0 01-2-2V4a2 2 0 012-2zm5 16h.01' },
+];
+
+/** Light / Dark / follow the phone. */
+function ThemePicker() {
+  const mode = useThemeMode();
+  return (
+    <Card className="p-4">
+      <h3 className="font-bold mb-3 text-sm">Theme</h3>
+      <div className="grid grid-cols-3 gap-1 rounded-xl bg-soft p-1" role="radiogroup" aria-label="Theme">
+        {THEMES.map((t) => (
+          <button key={t.m} role="radio" aria-checked={mode === t.m} onClick={() => setThemeMode(t.m)}
+            className={`flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold transition ${mode === t.m ? 'bg-card text-saf shadow-card' : 'text-mut hover:text-ink'}`}>
+            <Icon d={t.d} size={16} />{t.label}
+          </button>
+        ))}
+      </div>
+    </Card>
+  );
 }

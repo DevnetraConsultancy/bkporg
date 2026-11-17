@@ -33,13 +33,14 @@ export default function Person() {
     <Page title={m.name} sub={`${postOf(idx, m)} · ${unit.name}`} back>
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
         <div className="space-y-4">
-          <Card className="p-5 text-center">
-            <div className="flex justify-center"><Avatar name={m.name} size={84} /></div>
-            <h2 className="mt-3 text-xl font-bold">{m.name}</h2>
+          <Card className="p-5 text-center relative overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-saf/15 to-transparent" />
+            <div className="relative flex justify-center"><Avatar name={m.name} size={84} /></div>
+            <h2 className="relative mt-3 text-xl font-bold tracking-tight">{m.name}</h2>
             <p className="text-sm text-mut flex items-center justify-center gap-1.5">{postOf(idx, m)}{isPowerPost(idx, m) && <PowerBadge />}</p>
             <div className="mt-2 flex flex-wrap justify-center gap-1 text-[11px]">
               {path.map((u) => (
-                <Link key={u.id} to={`/unit/${u.id}`} className="rounded-full bg-saf-50 text-saf-700 px-2 py-0.5 hover:bg-saf-100">
+                <Link key={u.id} to={`/unit/${u.id}`} className="rounded-full bg-saf-50 text-saf ring-1 ring-saf/15 px-2 py-0.5 hover:bg-saf-100">
                   {TYPE_LABEL[u.type]}: {u.name.replace(' Assembly', '')}
                 </Link>
               ))}

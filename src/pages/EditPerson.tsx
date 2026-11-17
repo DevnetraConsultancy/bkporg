@@ -49,7 +49,7 @@ export default function EditPerson() {
       <Card className="p-4 max-w-xl mx-auto space-y-3">
         <Field label="Full name *"><input className={inputCls} value={f.name} onChange={(e) => set('name', e.target.value)} /></Field>
         <Field label="Email * (login ID)"><input type="email" className={inputCls} value={f.email} onChange={(e) => set('email', e.target.value)} placeholder="name@gmail.com" /></Field>
-        {emailChanged && <p className="text-xs rounded-lg bg-saf-50 text-saf-700 px-3 py-2">An email will be sent to this address with a link to set a password.</p>}
+        {emailChanged && <p className="text-xs rounded-lg bg-saf-50 text-saf ring-1 ring-saf/15 px-3 py-2">An email will be sent to this address with a link to set a password.</p>}
         <Field label="Post (designation)">
           <select className={inputCls} value={f.post} onChange={(e) => set('post', e.target.value)}>
             {posts.map((p) => <option key={p}>{p}</option>)}

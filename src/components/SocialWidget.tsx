@@ -18,12 +18,12 @@ export default function SocialWidget() {
     <section className="mb-4">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-sm font-bold">📣 Social media</h2>
-        <span className="text-[10px] rounded-full bg-gray-100 text-mut px-2 py-0.5">Demo numbers</span>
+        <span className="text-[10px] rounded-full bg-soft text-mut px-2 py-0.5">Demo numbers</span>
       </div>
       <div className="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4 snap-x">
         {DEMO_POSTS.map((p) => (
           <a key={p.id} href={p.url} target="_blank" rel="noreferrer"
-            className="snap-start shrink-0 w-64 rounded-2xl bg-white border border-line p-3 hover:border-[#1877F2]">
+            className="snap-start shrink-0 w-64 rounded-2xl bg-card border border-line shadow-card p-3 transition hover:border-[#1877F2]/60 hover:shadow-lift hover:-translate-y-px">
             <div className="flex items-center gap-2 text-[11px] text-mut">
               <span className="w-5 h-5 rounded-full bg-[#1877F2] text-white grid place-items-center font-bold text-[12px]">f</span>
               {new Date(p.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
