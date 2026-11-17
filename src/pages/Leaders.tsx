@@ -31,6 +31,9 @@ export default function Leaders() {
     <Page title="Appoint President, GS, IT" sub={unit.name} back>
       <div className="max-w-2xl mx-auto space-y-3">
         <p className="text-sm text-mut">These 3 people manage <b>{unit.name}</b>. They can add the other members of this committee, set ranking and create events. Each one gets an email to set their password.</p>
+        {POWER_POSTS[unit.type].length === 0 && (
+          <Card className="p-4 text-sm">{unit.name} has no own President. It is managed by the President, General Secretary and IT In-charge of the unit above it.</Card>
+        )}
         {POWER_POSTS[unit.type].map((post) => (
           <Slot key={post + (committee.find((m) => m.post === post)?.id ?? '')} unit={unit} post={post} holder={committee.find((m) => m.post === post)} />
         ))}

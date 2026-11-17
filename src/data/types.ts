@@ -1,4 +1,4 @@
-export type UnitType = 'district' | 'assembly' | 'mandal' | 'morcha' | 'shakti' | 'booth';
+export type UnitType = 'district' | 'extended' | 'cell' | 'assembly' | 'mandal' | 'morcha' | 'shakti' | 'booth';
 
 export interface Unit {
   id: string;

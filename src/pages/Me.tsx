@@ -9,7 +9,7 @@ export default function Me() {
   const m = user?.kind === 'member' ? idx.member.get(user.id) : undefined;
   const p = powerUnit(idx, user);
   const sup = isAdmin(user);
-  const counts = (['assembly', 'mandal', 'morcha', 'shakti', 'booth'] as UnitType[]).map((t) => [t, db.units.filter((u) => u.type === t).length] as const);
+  const counts = (['assembly', 'mandal', 'morcha', 'cell', 'shakti', 'booth'] as UnitType[]).map((t) => [t, db.units.filter((u) => u.type === t).length] as const);
   const leaders = db.members.filter((x) => POWER_POSTS[idx.unit.get(x.unitId)!.type].includes(x.post));
   const activeLeaders = leaders.filter((x) => x.passwordHash).length;
 

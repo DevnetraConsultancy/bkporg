@@ -57,7 +57,7 @@ export function EventsList() {
   );
 }
 
-const LEVELS: UnitType[] = ['assembly', 'mandal', 'morcha', 'shakti', 'booth'];
+const LEVELS: UnitType[] = ['extended', 'cell', 'morcha', 'assembly', 'mandal', 'shakti', 'booth'];
 
 export function NewEvent() {
   const { idx, user, addEvent } = useStore();

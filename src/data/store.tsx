@@ -4,7 +4,7 @@ import { createSeed } from './seed';
 import { POWER_POSTS } from './config';
 import { hashPw, newToken, passwordProblem } from './hash';
 
-const DB_KEY = 'bkp-sangathan-db-v2';
+const DB_KEY = 'bkp-sangathan-db-v3';
 const USER_KEY = 'bkp-sangathan-user-v1';
 
 function load<T>(key: string, fallback: () => T): T {
@@ -81,7 +81,11 @@ export function powerUnit(idx: Index, user: User | null): Unit | null {
 export function canManage(idx: Index, user: User | null, unitId: string) {
   if (isAdmin(user)) return true;
   const p = powerUnit(idx, user);
-  return !!p && p.id === unitId;
+  if (!p) return false;
+  const u = idx.unit.get(unitId);
+  // A committee without its own 3 (e.g. Extended Committee) is managed by the unit above it.
+  const owner = u && POWER_POSTS[u.type].length === 0 ? u.parentId : unitId;
+  return p.id === owner;
 }
 
 /** Can edit this person's record? These 3 cannot edit each other; only Admin can. */
@@ -91,6 +95,11 @@ export function canEditMember(idx: Index, user: User | null, m: Member) {
 }
 
 /** Post as shown on screen. The District President is the Supreme Commander. */
+/** Name of a unit's own committee: the District's is called "Office Bearers". */
+export function committeeName(idx: Index, u: Unit) {
+  return u.id === idx.root.id ? 'Office Bearers' : u.type === 'extended' ? 'Members' : 'Committee';
+}
+
 export function postOf(idx: Index, m: Member) {
   return m.unitId === idx.root.id && m.post === 'President' ? 'President (Supreme Commander)' : m.post;
 }

@@ -1,6 +1,6 @@
 import type { DB, Member, Unit, UnitType, EventItem } from './types';
 import { hashPw } from './hash';
-import { ADMIN_EMAIL, DEMO_ADMIN_PASSWORD, DEMO_MEMBER_PASSWORD, ASSEMBLIES, BOOTHS_PER_SHAKTI, MANDALS_PER_ASSEMBLY, MORCHAS, POSTS, SHAKTI_PER_MANDAL } from './config';
+import { ADMIN_EMAIL, DEMO_ADMIN_PASSWORD, DEMO_MEMBER_PASSWORD, ASSEMBLIES, BOOTHS_PER_SHAKTI, CELLS, MANDALS_PER_ASSEMBLY, MORCHAS, POSTS, SHAKTI_PER_MANDAL } from './config';
 
 // Small seeded random generator, so the demo data is the same every time.
 function rng(seed: number) {
@@ -63,7 +63,9 @@ export function createSeed(): DB {
     MORCHAS.forEach((m) => addUnit('morcha', `${prefix} ${m}`, parentId, area, m === 'Mahila Morcha'));
 
   const district = addUnit('district', 'Barrackpore District', null, 'Barrackpore');
+  addUnit('extended', 'District Extended Committee', district, 'Barrackpore');
   addMorchas(district, 'District', 'Barrackpore');
+  CELLS.forEach((c) => addUnit('cell', `District ${c}`, district, 'Barrackpore'));
   let booth = 0;
   ASSEMBLIES.forEach((a) => {
     const asm = addUnit('assembly', `${a} Assembly`, district, a);

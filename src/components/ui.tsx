@@ -126,19 +126,19 @@ export function PersonNode({ m }: { m: Member }) {
 }
 
 /** One unit (Assembly / Mandal / ...) in the mind map. Tap goes one level down. */
-export function UnitNode({ u }: { u: Unit }) {
+export function UnitNode({ u, color }: { u: Unit; color?: string }) {
   const { idx } = useStore();
   const head = idx.membersOf.get(u.id)?.[0];
   const below = idx.children.get(u.id)?.length ?? 0;
   return (
     <Link to={`/unit/${u.id}`} className="flex items-center gap-3 bg-white rounded-xl border border-line px-3 py-2.5 hover:border-saf active:scale-[.99] transition">
-      <div className="w-1.5 self-stretch rounded-full bg-saf/70" />
+      <div className="w-1.5 self-stretch rounded-full bg-saf/70" style={color ? { background: color } : undefined} />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold truncate">{u.name}</div>
         <div className="text-xs text-mut truncate">{head ? `${head.name} · ${postOf(idx, head)}` : 'No head yet'}</div>
       </div>
       <div className="text-right">
-        <div className="text-xs font-semibold text-saf">{idx.subtreeCount.get(u.id)} people</div>
+        <div className="text-xs font-semibold" style={{ color: color ?? 'var(--color-saf)' }}>{idx.subtreeCount.get(u.id)} people</div>
         {below > 0 && <div className="text-[10px] text-mut">{below} below</div>}
       </div>
       <Icon d={I.chev} size={18} className="text-gray-300" />

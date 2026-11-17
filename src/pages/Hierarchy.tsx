@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { ancestors, canManage, isAdmin, postOf, useStore, type Index } from '../data/store';
-import { TYPE_LABEL, TYPE_PLURAL } from '../data/config';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { ancestors, canManage, committeeName, isAdmin, postOf, useStore, type Index } from '../data/store';
+import { BRANCH_COLOR, TYPE_LABEL, TYPE_PLURAL } from '../data/config';
 import type { Unit, UnitType } from '../data/types';
 import SocialWidget from '../components/SocialWidget';
 import { Avatar, Card, I, Icon, Page, PersonNode, UnitNode, btn2Cls } from '../components/ui';
@@ -11,6 +11,7 @@ const VIEW_KEY = 'bkp-view';
 export default function Hierarchy() {
   const { idx, user } = useStore();
   const { id } = useParams();
+  const [sp, setSp] = useSearchParams();
   const unit = idx.unit.get(id ?? idx.root.id);
   const [view, setView] = useState<'map' | 'list'>(() => {
     try { return (localStorage.getItem(VIEW_KEY) as 'map' | 'list') || 'map'; } catch { return 'map'; }
@@ -23,6 +24,17 @@ export default function Hierarchy() {
   const head = committee[0];
   const kids = idx.children.get(unit.id) ?? [];
   const groups = groupByType(kids);
+  // Branch tiles: the unit's own committee first, then each kind of unit below it.
+  const tiles = [
+    { key: 'committee', label: committeeName(idx, unit), count: committee.length, sub: 'people', color: BRANCH_COLOR.committee },
+    ...groups.map(([t, list]) => ({
+      key: t, label: TYPE_PLURAL[t], color: BRANCH_COLOR[t],
+      count: t === 'extended' ? (idx.membersOf.get(list[0].id)?.length ?? 0) : list.length,
+      sub: t === 'extended' ? 'people' : 'units',
+    })),
+  ];
+  const selected = tiles.find((t) => t.key === sp.get('b'))?.key ?? 'committee';
+  const pick = (key: string) => setSp(key === 'committee' ? {} : { b: key }, { replace: true });
   const editable = canManage(idx, user, unit.id);
   const admin = isAdmin(user);
 
@@ -75,35 +87,50 @@ export default function Hierarchy() {
             )}
           </Card>
 
-          <div className="mt-2 grid gap-x-8 lg:grid-cols-2">
+          {tiles.length > 1 && (
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6" role="tablist">
+              {tiles.map((t) => {
+                const on = t.key === selected;
+                return (
+                  <button key={t.key} role="tab" aria-selected={on} onClick={() => pick(t.key)}
+                    className="relative overflow-hidden rounded-2xl border px-3 py-2.5 text-left transition active:scale-[.98]"
+                    style={on ? { background: t.color, borderColor: t.color, color: '#fff' } : { background: '#fff', borderColor: 'var(--color-line)' }}>
+                    {!on && <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: t.color }} />}
+                    <div className="text-2xl font-bold leading-tight" style={on ? undefined : { color: t.color }}>{t.count}</div>
+                    <div className="text-xs font-semibold truncate">{t.label}</div>
+                    <div className={`text-[10px] ${on ? 'text-white/80' : 'text-mut'}`}>{t.sub}</div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {selected === 'committee' ? (
             <section>
-              <SectionTitle text={`Committee (${committee.length})`} />
+              <SectionTitle text={`${committeeName(idx, unit)} (${committee.length})`} color={BRANCH_COLOR.committee} />
               <ul className="branch">
                 {committee.map((m) => <li key={m.id}><PersonNode m={m} /></li>)}
               </ul>
-            </section>
-            <div>
-              {groups.map(([type, list]) => (
-                <section key={type}>
-                  <SectionTitle text={`${TYPE_PLURAL[type]} (${list.length})`} />
-                  <ul className="branch">
-                    {list.map((u) => <li key={u.id}><UnitNode u={u} /></li>)}
-                  </ul>
-                </section>
-              ))}
               {groups.length === 0 && <p className="mt-6 text-sm text-mut text-center">This is the lowest level.</p>}
-            </div>
-          </div>
+            </section>
+          ) : groups.filter(([t]) => t === selected).map(([type, list]) => (
+            <section key={type}>
+              <SectionTitle text={`${TYPE_PLURAL[type]} (${list.length})`} color={BRANCH_COLOR[type]} />
+              <ul className="branch" style={{ ['--branch' as string]: BRANCH_COLOR[type] }}>
+                {list.map((u) => <li key={u.id}><UnitNode u={u} color={BRANCH_COLOR[type]} /></li>)}
+              </ul>
+            </section>
+          ))}
         </>
       )}
     </Page>
   );
 }
 
-function SectionTitle({ text }: { text: string }) {
+function SectionTitle({ text, color }: { text: string; color: string }) {
   return (
     <h2 className="mt-5 mb-1 flex items-center gap-2 text-sm font-bold">
-      <span className="w-3 h-3 rounded-full border-[3px] border-saf ml-[20px]" />{text}
+      <span className="w-3 h-3 rounded-full border-[3px] ml-[20px]" style={{ borderColor: color }} />{text}
     </h2>
   );
 }
@@ -122,7 +149,7 @@ function ViewToggle({ view, onChange }: { view: 'map' | 'list'; onChange: (v: 'm
 }
 
 function groupByType(units: Unit[]): [UnitType, Unit[]][] {
-  const order: UnitType[] = ['assembly', 'mandal', 'shakti', 'booth', 'morcha'];
+  const order: UnitType[] = ['extended', 'morcha', 'cell', 'assembly', 'mandal', 'shakti', 'booth'];
   return order.map((t) => [t, units.filter((u) => u.type === t)] as [UnitType, Unit[]]).filter(([, l]) => l.length);
 }
 
