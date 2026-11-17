@@ -34,3 +34,13 @@ npm run dev
 | `src/data/store.tsx` | Data store, login, permission rules |
 | `src/pages/` | Screens |
 | `src/components/` | Shared UI parts |
+
+## Deploy
+
+Every push to `main` on GitHub (`DevnetraConsultancy/bkporg`) is built and published by Vercel (project `bjp-bkporg`).
+
+Live: https://bjp-bkporg.vercel.app
+
+## Theme
+
+Light, Dark or follow the phone. Switch with the sun/moon button or on the **Me** page.
