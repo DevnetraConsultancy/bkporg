@@ -38,7 +38,7 @@ export const POSTS: Record<UnitType, string[]> = {
     'Member', 'Member', 'Member', 'Member', 'Member', 'Member'],
 };
 
-/** The 3 leader posts of each committee. Only Admin can appoint them.
+/** The 3 posts that manage each committee. Only Admin can appoint them.
  *  They can add/edit the other members of their own committee, set ranking and create events. */
 export const POWER_POSTS: Record<UnitType, string[]> = {
   district: ['President', 'General Secretary', 'IT In-charge'],

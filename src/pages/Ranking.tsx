@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { canManage, useStore } from '../data/store';
+import { canManage, postOf, useStore } from '../data/store';
 import { Avatar, Card, I, Icon, Page, btnCls } from '../components/ui';
 
 export default function Ranking() {
@@ -33,7 +33,7 @@ export default function Ranking() {
                 <Avatar name={m.name} size={34} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold truncate">{m.name}</div>
-                  <div className="text-xs text-mut">{m.post}</div>
+                  <div className="text-xs text-mut">{postOf(idx, m)}</div>
                 </div>
                 <button aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)} className="p-2 rounded-lg border border-line disabled:opacity-30"><Icon d={I.up} size={16} /></button>
                 <button aria-label="Move down" disabled={i === order.length - 1} onClick={() => move(i, 1)} className="p-2 rounded-lg border border-line disabled:opacity-30"><Icon d={I.down} size={16} /></button>

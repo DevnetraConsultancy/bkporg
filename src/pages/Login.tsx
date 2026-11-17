@@ -31,8 +31,8 @@ export default function Login() {
   const naihati1 = [...idx.unit.values()].find((u) => u.name === 'Naihati Mandal 1');
   const mandal = naihati1 ? idx.membersOf.get(naihati1.id) ?? [] : [];
   const demos = [
-    { label: 'Super Admin (you)', email: ADMIN_EMAIL, pw: DEMO_ADMIN_PASSWORD },
-    { label: 'District President', email: dist.find((m) => m.post === 'President')?.email, pw: DEMO_MEMBER_PASSWORD },
+    { label: 'Admin (you, app owner)', email: ADMIN_EMAIL, pw: DEMO_ADMIN_PASSWORD },
+    { label: 'District President (Supreme Commander)', email: dist.find((m) => m.post === 'President')?.email, pw: DEMO_MEMBER_PASSWORD },
     { label: 'Naihati Mandal 1 President', email: mandal.find((m) => m.post === 'President')?.email, pw: DEMO_MEMBER_PASSWORD },
     { label: 'Naihati Mandal 1 Treasurer (view only)', email: mandal.find((m) => m.post === 'Treasurer')?.email, pw: DEMO_MEMBER_PASSWORD },
   ].filter((d) => d.email) as { label: string; email: string; pw: string }[];
@@ -54,7 +54,7 @@ export default function Login() {
               {error && <p className="text-sm text-bad">{error}</p>}
               <button onClick={doLogin} className={btnCls + ' w-full'}>Log in</button>
               <button onClick={() => go('forgot')} className="w-full text-sm font-semibold text-saf">Forgot / set password</button>
-              <p className="text-xs text-mut text-center">New here? Your committee leader adds your email first. Then tap "Forgot / set password".</p>
+              <p className="text-xs text-mut text-center">New here? Your committee President, General Secretary or IT In-charge adds your email first. Then tap "Forgot / set password".</p>
             </>
           )}
 

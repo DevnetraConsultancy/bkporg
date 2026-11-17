@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { displayName, myId, useStore } from '../data/store';
+import { displayName, myId, postOf, useStore } from '../data/store';
 import { Avatar, Card, Page, btnCls, inputCls } from '../components/ui';
 
 export function Inbox() {
@@ -54,7 +54,7 @@ export function Chat() {
   const send = () => { if (text.trim()) { sendMessage(other, text.trim()); setText(''); } };
 
   return (
-    <Page title={displayName(idx, other)} sub={p ? `${p.post} · ${idx.unit.get(p.unitId)?.name}` : 'Super Admin'} back>
+    <Page title={displayName(idx, other)} sub={p ? `${postOf(idx, p)} · ${idx.unit.get(p.unitId)?.name}` : 'Admin'} back>
       <div className="max-w-2xl mx-auto space-y-2 pb-20">
         <p className="text-center text-[11px] text-mut">Demo chat. The real app will use end-to-end encryption.</p>
         {msgs.map((m) => (

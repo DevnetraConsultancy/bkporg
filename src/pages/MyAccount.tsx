@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useStore, type ProfileFields } from '../data/store';
+import { postOf, useStore, type ProfileFields } from '../data/store';
 import type { Member } from '../data/types';
 import { Card, Field, Page, btnCls, inputCls } from '../components/ui';
 
@@ -22,8 +22,8 @@ export function MyProfile() {
     <Page title="Edit my profile" back>
       <Card className="p-4 max-w-xl mx-auto space-y-3">
         <Locked label="Email (login ID)" value={m.email} />
-        <Locked label="Post (designation)" value={`${m.post}, ${idx.unit.get(m.unitId)?.name}`} />
-        <p className="text-xs text-mut -mt-1">🔒 Only your committee leaders or Admin can change these.</p>
+        <Locked label="Post (designation)" value={`${postOf(idx, m)}, ${idx.unit.get(m.unitId)?.name}`} />
+        <p className="text-xs text-mut -mt-1">🔒 Only your committee's President, General Secretary, IT In-charge or Admin can change these.</p>
         <Field label="Full name"><input className={inputCls} value={f.name} onChange={(e) => set('name', e.target.value)} /></Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Phone"><input className={inputCls} value={f.phone} onChange={(e) => set('phone', e.target.value)} /></Field>

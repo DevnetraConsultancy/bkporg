@@ -68,7 +68,7 @@ export function isPowerPost(idx: Index, m: Member) {
 
 export const isAdmin = (user: User | null) => user?.kind === 'admin';
 
-/** The unit whose committee this user leads (null = not a leader). Admin leads the whole district. */
+/** The unit whose committee this user leads (null = none). Admin (the app owner) manages everything. */
 export function powerUnit(idx: Index, user: User | null): Unit | null {
   if (!user) return null;
   if (user.kind === 'admin') return idx.root;
@@ -77,21 +77,26 @@ export function powerUnit(idx: Index, user: User | null): Unit | null {
 }
 
 /** Can add people, set ranking and create events for this unit's committee?
- *  Admin: every unit. The 3 leaders: only their own committee. */
+ *  Admin: every unit. President, General Secretary, IT In-charge: only their own committee. */
 export function canManage(idx: Index, user: User | null, unitId: string) {
   if (isAdmin(user)) return true;
   const p = powerUnit(idx, user);
   return !!p && p.id === unitId;
 }
 
-/** Can edit this person's record? Leaders cannot edit other leaders; only Admin can. */
+/** Can edit this person's record? These 3 cannot edit each other; only Admin can. */
 export function canEditMember(idx: Index, user: User | null, m: Member) {
   if (isAdmin(user)) return true;
   return canManage(idx, user, m.unitId) && !isPowerPost(idx, m);
 }
 
+/** Post as shown on screen. The District President is the Supreme Commander. */
+export function postOf(idx: Index, m: Member) {
+  return m.unitId === idx.root.id && m.post === 'President' ? 'President (Supreme Commander)' : m.post;
+}
+
 export function displayName(idx: Index, id: string) {
-  return id === 'admin' ? 'Super Admin' : idx.member.get(id)?.name ?? 'Unknown';
+  return id === 'admin' ? 'Admin' : idx.member.get(id)?.name ?? 'Unknown';
 }
 
 /* ---------- React store ---------- */

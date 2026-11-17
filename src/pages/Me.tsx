@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { isAdmin, powerUnit, useStore } from '../data/store';
+import { isAdmin, postOf, powerUnit, useStore } from '../data/store';
 import { ADMIN_EMAIL, POWER_POSTS, TYPE_PLURAL } from '../data/config';
 import type { UnitType } from '../data/types';
 import { Avatar, Card, Page, btn2Cls } from '../components/ui';
@@ -17,18 +17,18 @@ export default function Me() {
     <Page title="Me">
       <div className="max-w-2xl mx-auto space-y-4">
         <Card className="p-4 flex items-center gap-3">
-          <Avatar name={m?.name ?? 'Super Admin'} size={56} />
+          <Avatar name={m?.name ?? 'Admin'} size={56} />
           <div className="flex-1 min-w-0">
-            <div className="font-bold text-lg truncate">{m?.name ?? 'Super Admin'}</div>
-            <div className="text-sm text-mut truncate">{m ? `${m.post} · ${idx.unit.get(m.unitId)?.name}` : ADMIN_EMAIL}</div>
+            <div className="font-bold text-lg truncate">{m?.name ?? 'Admin'}</div>
+            <div className="text-sm text-mut truncate">{m ? `${postOf(idx, m)} · ${idx.unit.get(m.unitId)?.name}` : `App owner · ${ADMIN_EMAIL}`}</div>
           </div>
           {m && <Link to={`/person/${m.id}`} className="text-saf text-sm font-semibold">Profile ›</Link>}
         </Card>
 
         <Card className="p-4 text-sm">
           <h3 className="font-bold mb-1">My power</h3>
-          {sup ? <p>Full control. Only you can appoint the 3 leaders (President, General Secretary, IT In-charge) of every committee.</p>
-            : p ? <p>You are a leader of <Link className="text-saf font-semibold" to={`/unit/${p.id}`}>{p.name}</Link>. You can add the other members of this committee by email, set ranking and create events.</p>
+          {sup ? <p>You are the Admin (app owner). Full control. Only you can appoint the President, General Secretary and IT In-charge of every committee.</p>
+            : p ? <p>You are the {m && postOf(idx, m)} of <Link className="text-saf font-semibold" to={`/unit/${p.id}`}>{p.name}</Link>. You can add the other members of this committee by email, set ranking and create events.</p>
               : <p className="text-mut">View only. You can see the hierarchy, events and messages.</p>}
         </Card>
 
@@ -44,8 +44,8 @@ export default function Me() {
             </Card>
             <Link to="/admin/leaders" className="block">
               <Card className="p-4 hover:border-saf">
-                <h3 className="font-bold text-sm">⭐ Appoint committee leaders ›</h3>
-                <p className="text-xs text-mut mt-1">{leaders.length} leader posts · {activeLeaders} active · {leaders.length - activeLeaders} invited, password not set</p>
+                <h3 className="font-bold text-sm">⭐ Appoint President, General Secretary, IT In-charge ›</h3>
+                <p className="text-xs text-mut mt-1">{leaders.length} posts · {activeLeaders} active · {leaders.length - activeLeaders} invited, password not set</p>
               </Card>
             </Link>
             <button onClick={() => confirm('Reset all demo data? Your changes will be lost.') && resetDemo()} className={btn2Cls + ' w-full'}>Reset demo data</button>

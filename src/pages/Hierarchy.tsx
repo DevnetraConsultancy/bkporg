@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { ancestors, canManage, isAdmin, useStore, type Index } from '../data/store';
+import { ancestors, canManage, isAdmin, postOf, useStore, type Index } from '../data/store';
 import { TYPE_LABEL, TYPE_PLURAL } from '../data/config';
 import type { Unit, UnitType } from '../data/types';
 import SocialWidget from '../components/SocialWidget';
@@ -60,14 +60,14 @@ export default function Hierarchy() {
                 <Avatar name={head.name} size={56} />
                 <div className="min-w-0 flex-1">
                   <div className="text-lg font-bold truncate group-hover:text-saf">{head.name}</div>
-                  <div className="text-sm text-mut">{head.post}, {unit.name}</div>
+                  <div className="text-sm text-mut">{postOf(idx, head)}, {unit.name}</div>
                 </div>
                 <Icon d={I.info} className="text-saf" />
               </Link>
             ) : <p className="text-sm text-mut">No one added yet.</p>}
             {editable && (
               <div className={`mt-4 grid gap-2 ${admin ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
-                {admin && <Link to={`/admin/leaders/${unit.id}`} className={btn2Cls + ' !px-2 !text-xs'}><Icon d={I.star} size={16} />Leaders</Link>}
+                {admin && <Link to={`/admin/leaders/${unit.id}`} className={btn2Cls + ' !px-2 !text-xs'}><Icon d={I.star} size={16} />Appoint</Link>}
                 <Link to={`/unit/${unit.id}/add`} className={btn2Cls + ' !px-2 !text-xs'}><Icon d={I.plus} size={16} />Add person</Link>
                 <Link to={`/unit/${unit.id}/ranking`} className={btn2Cls + ' !px-2 !text-xs'}><Icon d={I.list} size={16} />Ranking</Link>
                 <Link to={`/events/new?unit=${unit.id}`} className={btn2Cls + ' !px-2 !text-xs'}><Icon d={I.cal} size={16} />Event</Link>
@@ -149,7 +149,7 @@ function TreeRow({ idx, u, depth, open: initOpen = false }: { idx: Index; u: Uni
         </button>
         <Link to={`/unit/${u.id}`} className="flex-1 min-w-0 py-1.5">
           <div className="text-sm font-semibold truncate">{u.name}</div>
-          <div className="text-xs text-mut truncate">{head ? `${head.name} · ${head.post}` : '—'}</div>
+          <div className="text-xs text-mut truncate">{head ? `${head.name} · ${postOf(idx, head)}` : '—'}</div>
         </Link>
         <span className="text-[11px] text-mut pr-2">{idx.subtreeCount.get(u.id)}</span>
       </div>

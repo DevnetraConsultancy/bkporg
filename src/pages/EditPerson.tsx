@@ -5,7 +5,7 @@ import { POSTS, POWER_POSTS } from '../data/config';
 import type { Member } from '../data/types';
 import { Card, Field, Page, btnCls, inputCls } from '../components/ui';
 
-/** Used for both "Add person" (/unit/:unitId/add) and "Edit" (/person/:id/edit) by Admin or a committee leader. */
+/** Used for both "Add person" (/unit/:unitId/add) and "Edit" (/person/:id/edit) by Admin or the committee's President, General Secretary or IT In-charge. */
 export default function EditPerson() {
   const { id, unitId } = useParams();
   const { idx, user, saveMember, removeMember, emailInUse } = useStore();
@@ -23,11 +23,11 @@ export default function EditPerson() {
   if (!unit) return <Navigate to="/" replace />;
   const allowed = existing ? canEditMember(idx, user, existing) : canManage(idx, user, unit.id);
   if (!allowed) {
-    return <Page title="Not allowed" back><Card className="p-6 text-center text-sm">Only Admin or the President, General Secretary or IT In-charge of this committee can do this. Leaders can be changed only by Admin.</Card></Page>;
+    return <Page title="Not allowed" back><Card className="p-6 text-center text-sm">Only Admin or the President, General Secretary or IT In-charge of this committee can do this. These 3 posts can be changed only by Admin.</Card></Page>;
   }
   const admin = isAdmin(user);
   const leaderPosts = POWER_POSTS[unit.type];
-  // Leaders can give any post except the 3 leader posts. Admin uses the "Leaders" page for those.
+  // These 3 can give any post except their own 3 posts. Admin uses the "Appoint" page for those.
   const posts = [...new Set([...POSTS[unit.type].filter((p) => admin || !leaderPosts.includes(p)), 'Member', f.post])];
   const set = <K extends keyof Member>(k: K, v: Member[K]) => setF({ ...f, [k]: v });
 
@@ -37,7 +37,7 @@ export default function EditPerson() {
     if (!/^\S+@\S+\.\S+$/.test(email)) return setError('Enter a valid email. The person will log in with this email.');
     if (emailInUse(email, f.id)) return setError('This email is already used by another person.');
     if (leaderPosts.includes(f.post) && (idx.membersOf.get(unit.id) ?? []).some((m) => m.post === f.post && m.id !== f.id)) {
-      return setError(`${unit.name} already has a ${f.post}. Use the Leaders page to replace them.`);
+      return setError(`${unit.name} already has a ${f.post}. Admin can replace them from the Appoint page.`);
     }
     saveMember({ ...f, name: f.name.trim(), email });
     nav(-1);

@@ -1,5 +1,5 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { ancestors, canEditMember, displayName, isPowerPost, myId, useStore } from '../data/store';
+import { ancestors, canEditMember, displayName, isPowerPost, myId, postOf, useStore } from '../data/store';
 import { TYPE_LABEL } from '../data/config';
 import { Avatar, Card, I, Icon, Page, PersonNode, PowerBadge, btnCls, btn2Cls } from '../components/ui';
 
@@ -30,13 +30,13 @@ export default function Person() {
   ];
 
   return (
-    <Page title={m.name} sub={`${m.post} · ${unit.name}`} back>
+    <Page title={m.name} sub={`${postOf(idx, m)} · ${unit.name}`} back>
       <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
         <div className="space-y-4">
           <Card className="p-5 text-center">
             <div className="flex justify-center"><Avatar name={m.name} size={84} /></div>
             <h2 className="mt-3 text-xl font-bold">{m.name}</h2>
-            <p className="text-sm text-mut flex items-center justify-center gap-1.5">{m.post}{isPowerPost(idx, m) && <PowerBadge />}</p>
+            <p className="text-sm text-mut flex items-center justify-center gap-1.5">{postOf(idx, m)}{isPowerPost(idx, m) && <PowerBadge />}</p>
             <div className="mt-2 flex flex-wrap justify-center gap-1 text-[11px]">
               {path.map((u) => (
                 <Link key={u.id} to={`/unit/${u.id}`} className="rounded-full bg-saf-50 text-saf-700 px-2 py-0.5 hover:bg-saf-100">

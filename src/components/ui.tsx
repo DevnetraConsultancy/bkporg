@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import type { Member, Unit } from '../data/types';
 import { TYPE_LABEL } from '../data/config';
-import { isPowerPost, myId, useStore } from '../data/store';
+import { isPowerPost, myId, postOf, useStore } from '../data/store';
 
 const COLORS = ['#EA6A0C', '#15803D', '#2563EB', '#9333EA', '#DB2777', '#0891B2', '#CA8A04', '#4F46E5'];
 
@@ -103,8 +103,8 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
 
 export function PowerBadge() {
   return (
-    <span title="Committee leader" className="inline-flex items-center gap-0.5 rounded-full bg-saf-100 text-saf-700 px-1.5 py-0.5 text-[10px] font-semibold">
-      <Icon d={I.star} size={10} /> Leader
+    <span title="Can manage this committee" aria-label="Can manage this committee" className="inline-flex items-center rounded-full bg-saf-100 text-saf-700 p-0.5">
+      <Icon d={I.star} size={11} />
     </span>
   );
 }
@@ -118,7 +118,7 @@ export function PersonNode({ m }: { m: Member }) {
       <Avatar name={m.name} size={36} />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold truncate">{m.name}</div>
-        <div className="text-xs text-mut truncate flex items-center gap-1.5">{m.post}{isPowerPost(idx, m) && <PowerBadge />}</div>
+        <div className="text-xs text-mut truncate flex items-center gap-1.5">{postOf(idx, m)}{isPowerPost(idx, m) && <PowerBadge />}</div>
       </div>
       <Icon d={I.chev} size={18} className="text-gray-300" />
     </Link>
@@ -135,7 +135,7 @@ export function UnitNode({ u }: { u: Unit }) {
       <div className="w-1.5 self-stretch rounded-full bg-saf/70" />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold truncate">{u.name}</div>
-        <div className="text-xs text-mut truncate">{head ? `${head.name} · ${head.post}` : 'No head yet'}</div>
+        <div className="text-xs text-mut truncate">{head ? `${head.name} · ${postOf(idx, head)}` : 'No head yet'}</div>
       </div>
       <div className="text-right">
         <div className="text-xs font-semibold text-saf">{idx.subtreeCount.get(u.id)} people</div>
